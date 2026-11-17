@@ -1,0 +1,24 @@
+FLORIFY 3.0 — INSTALAÇÃO
+
+1. Copie a pasta Florify3.0 para o diretório público do servidor PHP (ex.: htdocs).
+2. No phpMyAdmin, importe database.sql. O script cria o banco `formulario` e as tabelas `usuario`, `produtos` e `pedido`.
+3. Confira as credenciais em config/db.php (padrão: localhost, banco formulario, usuário root, senha vazia). Também é possível definir FLORIFY_DB_HOST, FLORIFY_DB_NAME, FLORIFY_DB_USER e FLORIFY_DB_PASS no ambiente.
+4. Acesse index.php. O cadastro público cria contas CLIENTE; o painel administrativo só abre para contas ADMIN.
+5. Na tela login.php, use o botão “Entrar como administrador” para abrir o modo de login administrativo. Ele usa o mesmo e-mail e senha, mas só permite entrar se o perfil no banco for ADMIN.
+6. Para dar perfil de administrador a uma conta já cadastrada, execute no phpMyAdmin (aba SQL), no banco formulario:
+   UPDATE usuario SET tipo_perfil = 'ADMIN' WHERE email = 'seu-email@exemplo.com';
+   Substitua pelo e-mail exato cadastrado. Confirme depois, na tabela usuario, se tipo_perfil aparece como ADMIN.
+   Para continuar como cliente, deixe tipo_perfil como CLIENTE. O cadastro público nunca cria administradores.
+
+OBSERVAÇÕES
+- A vitrine de itens lê a tabela produtos; o catálogo inicial está vazio se o banco importado não tiver registros. Cadastre produtos no painel.
+- O pedido é gravado no banco e o estoque é reduzido em transação. A etapa de pagamento ainda é combinada com a loja pelo WhatsApp; não há gateway de cobrança integrado.
+- As imagens cadastradas podem ser URL absoluta ou caminho relativo dentro da pasta do projeto (por exemplo imagens/buque.jpg).
+
+
+CONFIGURAÇÃO DA VISUALIZAÇÃO COM IA
+- A visualização usa o modelo gpt-image-2 no endpoint /v1/images/edits.
+- Configure a variável de ambiente OPENAI_API_KEY no servidor com uma chave nova e ativa.
+- Não cole a chave no código, não envie a chave por e-mail/chat e não publique o arquivo de configuração com segredos.
+- Se estiver usando WAMP/Windows localmente, configure OPENAI_API_KEY no ambiente do Apache/PHP e reinicie o Apache.
+- A chave que estava embutida na versão original foi removida por segurança. Gere uma chave nova no painel da OpenAI.
